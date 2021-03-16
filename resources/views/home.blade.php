@@ -14,9 +14,8 @@
                         </div>
                     @endif
                     <div id="vueApp">
-                        <dashboard-component 
+                        <dashboard-component
                             :user="{{ json_encode($user) }}"
-                            :users="{{ json_encode($users) }}"
                         >
                         </dashboard-component>
                     </div>

@@ -1939,25 +1939,212 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'dashboard-component',
   props: {
     user: {
       type: Object,
-      "default": function _default() {
-        return {};
-      }
-    },
-    users: {
-      type: Array,
-      "default": function _default() {
+      defaul: function defaul() {
         return {};
       }
     }
   },
-  mounted: function mounted() {
-    console.log(this.user);
-    console.log(this.users);
+  data: function data() {
+    return {
+      userDetail: [],
+      newUser: {
+        name: '',
+        email: ''
+      },
+      users: []
+    };
+  },
+  created: function created() {
+    this.getUsers();
+  },
+  computed: {
+    members: function members() {
+      return this.users.length;
+    }
+  },
+  methods: {
+    showDetail: function showDetail(id) {
+      this.getUser(id);
+    },
+    showEdit: function showEdit(id) {
+      this.getUser(id);
+    },
+    deleteUser: function deleteUser(id) {
+      var _this = this;
+
+      var index = this.users.findIndex(function (item) {
+        return id === item.id;
+      });
+      axios["delete"]("/users/".concat(id)).then(function (_ref) {
+        var data = _ref.data;
+
+        _this.users.splice(index, 1);
+      })["catch"](function (_ref2) {
+        var error = _ref2.error;
+        console.log(error);
+      });
+    },
+    createUser: function createUser() {
+      var _this2 = this;
+
+      axios.post('/users', this.newUser).then(function (_ref3) {
+        var data = _ref3.data;
+
+        _this2.users.push(data.newUser);
+      })["catch"](function (_ref4) {
+        var error = _ref4.error;
+        alert('error');
+      });
+      this.hideModal('create');
+    },
+    getUsers: function getUsers() {
+      var _this3 = this;
+
+      axios.get('/users').then(function (response) {
+        _this3.users = response.data.users;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    getUser: function getUser(id) {
+      var _this4 = this;
+
+      axios.get("/users/".concat(id)).then(function (_ref5) {
+        var data = _ref5.data;
+        _this4.userDetail = data;
+      })["catch"](function (_ref6) {
+        var error = _ref6.error;
+        alert('ec');
+      });
+    },
+    editUser: function editUser(id) {
+      var _this5 = this;
+
+      var index = this.users.findIndex(function (item) {
+        return id === item.id;
+      });
+      axios.patch("/users/".concat(id), this.userDetail).then(function (_ref7) {
+        var data = _ref7.data;
+        Vue.set(_this5.users, index, data.user);
+      })["catch"](function (error) {
+        return function () {
+          console.log(error);
+        };
+      });
+      $('#edi').modal('hide');
+    },
+    hideModal: function hideModal() {
+      $('#create').modal('hide');
+      $(document).on('hidden.bs.modal', '#create', function () {
+        $('#create input[id="name-create"]').val('');
+        $('#create input[id="email-create"]').val('');
+      });
+    }
   }
 });
 
@@ -37625,47 +37812,419 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-3" }, [
-        _vm.user.isAdmin === 1
-          ? _c(
-              "button",
-              { staticClass: "btn btn-info", attrs: { type: "button" } },
-              [_vm._v("\n\t        \t\tAdd new\n\t    \t\t")]
-            )
-          : _vm._e()
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticStyle: { float: "left" } }, [
+        _vm._v(
+          "\n                Number of members: " +
+            _vm._s(_vm.members) +
+            "\n            "
+        )
       ]),
       _vm._v(" "),
-      _c("div", { class: _vm.user.isAdmin === 1 ? "col-md-9" : "col-md-12" }, [
+      _vm.user.isAdmin === 1
+        ? _c("div", [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: {
+                  title: "Adding new user",
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#create",
+                  "data-whatever": "@mdo"
+                }
+              },
+              [_vm._v("Add")]
+            )
+          ])
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-12" }, [
         _c("table", [
-          _vm._m(0),
+          _c("thead", [
+            _c("tr", [
+              _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("Name")]),
+              _vm._v(" "),
+              _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("Email")]),
+              _vm._v(" "),
+              _c("td", { staticStyle: { padding: "10px" } }, [
+                _vm._v("Created at")
+              ]),
+              _vm._v(" "),
+              _c("td", { staticStyle: { padding: "10px" } }, [
+                _vm._v("Updated at")
+              ]),
+              _vm._v(" "),
+              _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("View")]),
+              _vm._v(" "),
+              _vm.user.isAdmin === 1
+                ? _c("td", { staticStyle: { padding: "10px" } }, [
+                    _vm._v("Edit")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.user.isAdmin === 1
+                ? _c("td", { staticStyle: { padding: "10px" } }, [
+                    _vm._v("Delete")
+                  ])
+                : _vm._e()
+            ])
+          ]),
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.users, function(user) {
-              return _c("tr", { key: user.id }, [
+            _vm._l(_vm.users, function(useR) {
+              return _c("tr", { key: useR.id }, [
                 _c("td", { staticStyle: { padding: "10px" } }, [
-                  _vm._v(_vm._s(user.name))
+                  _vm._v(_vm._s(useR.name))
                 ]),
                 _vm._v(" "),
                 _c("td", { staticStyle: { padding: "10px" } }, [
-                  _vm._v(_vm._s(user.email))
+                  _vm._v(_vm._s(useR.email))
                 ]),
                 _vm._v(" "),
                 _c("td", { staticStyle: { padding: "10px" } }, [
-                  _vm._v(_vm._s(user.created_at))
+                  _vm._v(_vm._s(useR.created_at))
                 ]),
                 _vm._v(" "),
                 _c("td", { staticStyle: { padding: "10px" } }, [
-                  _vm._v(_vm._s(user.updated_at))
-                ])
+                  _vm._v(_vm._s(useR.updated_at))
+                ]),
+                _vm._v(" "),
+                _vm.user.isAdmin === 1
+                  ? _c("td", { staticStyle: { padding: "10px" } }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            type: "button",
+                            "data-toggle": "modal",
+                            "data-target": "#detail",
+                            "data-whatever": "@mdo"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.showDetail(useR.id)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    View\n                                "
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.user.isAdmin === 1
+                  ? _c("td", { staticStyle: { padding: "10px" } }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            type: "button",
+                            "data-toggle": "modal",
+                            "data-target": "#edit",
+                            "data-whatever": "@mdo"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.showEdit(useR.id)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Edit\n                                "
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.user.isAdmin === 1
+                  ? _c("td", { staticStyle: { padding: "10px" } }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteUser(useR.id)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Delete\n                                "
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e()
               ])
             }),
             0
           )
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "detail",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("User: " + _vm._s(_vm.userDetail.name))]
+                ),
+                _vm._v(" "),
+                _vm._m(0)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "col-form-label" }, [
+                    _vm._v("Name: " + _vm._s(_vm.userDetail.name))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "col-form-label" }, [
+                    _vm._v("Email: " + _vm._s(_vm.userDetail.email))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "col-form-label" }, [
+                    _vm._v("Created_at: " + _vm._s(_vm.userDetail.created_at))
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "create",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("form", [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-form-label",
+                        attrs: { for: "name-create" }
+                      },
+                      [_vm._v("Name: ")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "name-create" },
+                      on: {
+                        input: function($event) {
+                          _vm.newUser.name = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-form-label",
+                        attrs: { for: "email-create" }
+                      },
+                      [_vm._v("Email:")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "email-create" },
+                      on: {
+                        input: function($event) {
+                          _vm.newUser.email = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass: "btn btn-primary",
+                      on: { click: _vm.createUser }
+                    },
+                    [_vm._v("Create")]
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "edit",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h5", { staticClass: "modal-title" }, [
+                  _vm._v("Edit " + _vm._s(_vm.userDetail.name))
+                ]),
+                _vm._v(" "),
+                _vm._m(3)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("form", [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-form-label",
+                        attrs: { for: "name-edit" }
+                      },
+                      [_vm._v("Name")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.userDetail.name,
+                          expression: "userDetail.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "name-edit" },
+                      domProps: { value: _vm.userDetail.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.userDetail, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-form-label",
+                        attrs: { for: "email-edit" }
+                      },
+                      [_vm._v("Email")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.userDetail.email,
+                          expression: "userDetail.email"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", id: "email-edit" },
+                      domProps: { value: _vm.userDetail.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.userDetail, "email", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass: "btn btn-primary",
+                      on: {
+                        click: function($event) {
+                          return _vm.editUser(_vm.userDetail.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Update")]
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -37673,17 +38232,71 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("Email")]),
-        _vm._v(" "),
-        _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("Created at")]),
-        _vm._v(" "),
-        _c("td", { staticStyle: { padding: "10px" } }, [_vm._v("Updated at")])
-      ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Create")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true
@@ -49878,7 +50491,6 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  */
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 Vue.component('dashboard-component', __webpack_require__(/*! ./components/DashBoardComponent.vue */ "./resources/js/components/DashBoardComponent.vue")["default"]);
 /**
@@ -50025,8 +50637,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/congnguyen/Documents/practice-vuejs/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/congnguyen/Documents/practice-vuejs/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/nguyen.xuan.cong/Documents/practice-vuejs/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/nguyen.xuan.cong/Documents/practice-vuejs/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
