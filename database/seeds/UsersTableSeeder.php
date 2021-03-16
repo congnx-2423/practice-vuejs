@@ -2,16 +2,17 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use Faker\Factory;
 
-class DatabaseSeeder extends Seeder
+class UsersTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call(UsersTableSeeder::class);
+    	Factory(User::class, 10)->create();
     }
 }

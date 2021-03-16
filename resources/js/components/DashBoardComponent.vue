@@ -28,7 +28,7 @@
 	                		<td style="padding:10px">{{ useR.email }}</td>
 	                		<td style="padding:10px">{{ useR.created_at }}</td>
 	                		<td style="padding:10px">{{ useR.updated_at }}</td>
-                            <td style="padding:10px" v-if="user.isAdmin === 1">
+                            <td style="padding:10px">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detail" data-whatever="@mdo" @click="showDetail(useR.id)">
                                     View
                                 </button>
