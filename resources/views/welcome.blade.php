@@ -83,11 +83,12 @@
                 <div class="title m-b-md">
                     Laravel + Vue
                 </div>
-
-                <div class="links">
-                    <a href="{{ route('home' )}}">Users</a>
-                    <a href="{{ route('posts.index') }}">Posts</a>
-                </div>
+                @auth
+                    <div class="links">
+                        <a href="{{ route('home' )}}">Users</a>
+                        <a href="{{ route('posts.index') }}">Posts</a>
+                    </div>
+                @endauth
             </div>
         </div>
     </body>

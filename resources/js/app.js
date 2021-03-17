@@ -20,12 +20,12 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component(
-	'dashboard-component', 
-	require('./components/DashBoardComponent.vue').default
+    'dashboard-component',
+    require('./components/DashBoardComponent.vue').default
 );
 Vue.component(
-	'post-component', 
-	require('./components/PostComponent.vue').default
+    'post-component',
+    require('./components/PostComponent.vue').default
 );
 
 
