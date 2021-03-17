@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" style="display: inline-block; max-height: 800px; overflow-y: scroll">
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
