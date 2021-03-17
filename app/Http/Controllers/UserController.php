@@ -1,18 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\User;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
+use App\Post;
 use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function __construct()
+    public function index()
     {
+        $users = User::where('id', '!=', Auth::id())
+            ->get();
+
+        return response()->json([
+            'users' => $users,
+            'code' =>Response::HTTP_OK,
+        ]);
     }
 
     public function show($id)
@@ -31,16 +39,6 @@ class UserController extends Controller
         return response()->json([
             'code' =>Response::HTTP_OK,
             'newUser' => $user
-        ]);
-    }
-
-    public function index()
-    {
-        $users = User::where('id', '!=', Auth::id())->get();
-
-        return response()->json([
-            'users' => $users,
-            'code' =>Response::HTTP_OK,
         ]);
     }
 
