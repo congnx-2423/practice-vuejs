@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\User;
+use App\Models\User;
 use Faker\Factory;
 
 class UsersTableSeeder extends Seeder
@@ -13,6 +13,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-    	Factory(User::class, 10)->create();
+        Factory(User::class, 10)->create();
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Auth;
+use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
@@ -14,7 +16,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post');
+        $currentUser = Auth::user();
+
+        return view('post', compact('currentUser'));
     }
 
     /**
@@ -41,12 +45,17 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        return response()->json([
+            'code' =>  Response::HTTP_OK,
+            'post' => $post,
+        ]);
     }
 
     /**
@@ -64,22 +73,33 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+
+        return response()->json([
+            'code' => Response::HTTP_OK,
+            'post' => $post,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Post  $post
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return response()->json([
+            'code' => Response::HTTP_OK,
+        ]);
     }
 }

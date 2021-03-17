@@ -19,15 +19,8 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component(
-	'dashboard-component', 
-	require('./components/DashBoardComponent.vue').default
-);
-Vue.component(
-	'post-component', 
-	require('./components/PostComponent.vue').default
-);
-
+import PostComponent from './components/post-component';
+import DashboardComponent from './components/dash-board-component';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,4 +30,8 @@ Vue.component(
 
 const app = new Vue({
     el: '#vueApp',
+    components: {
+        PostComponent,
+        DashboardComponent,
+    }
 });

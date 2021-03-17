@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Faker\Factory;
-use App\Post;
+use App\Models\Post;
 
 class PostsTableSeeder extends Seeder
 {
