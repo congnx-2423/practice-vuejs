@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div id="vueApp">
-        <post-component></post-component>
+        <post-component :current-user="{{ json_encode($currentUser) }}"></post-component>
     </div>
 @endsection
 @section('extra-js')

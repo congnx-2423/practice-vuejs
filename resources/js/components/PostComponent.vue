@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
+        <div class="row">
+            <div class="col-5" id="post_table">
                 <table style="border: 1px solid black">
                     <thead>
                         <tr>
@@ -12,7 +12,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="user in users" :key="user.id">
-                            <td style="padding:10px">{{ user.name }}</td>
+                            <td style="padding:10px" @click="toggleExpansion(user.id)" :title="'Click me!'">{{ user.name }}</td>
                             <td style="padding:10px">{{ user.email }}</td>
                             <td style="padding:10px">{{ user.created_at}}</td>
                         </tr>
@@ -20,26 +20,37 @@
                 </table>
             </div>
 
-
-            <detail-post-component></detail-post-component>
+            <detail-post-component v-show="isExpanded(code)"
+                :detail-post="detailPost"
+                :edit-permission="currentUser.isAdmin"
+            ></detail-post-component>
         </div>
     </div>
 </template>
 
 <script>
-    import DetailPostComponent from './DetailPostComponent.vue'
+    import DetailPostComponent from './DetailPostComponent';
 
     export default {
         name: 'post-component',
 
+        props: {
+            currentUser: {
+                type: Object,
+                default: () => ({}),
+            },
+        },
+
         components: {
-            'detail-post-component': DetailPostComponent
+            DetailPostComponent
         },
 
         data() {
             return {
                 users: [],
-                currentUser: [],
+                detailPost: [],
+                code: 0,
+                editPermission: false,
             }
         },
 
@@ -49,14 +60,37 @@
 
         methods: {
             getUsers() {
-                axios.get(`/users`)
+                axios.get(laroute.route('users.index'))
                     .then(({data}) => {
                         this.users = data.users;
-                        console.log(data);
                     }).catch(({error}) => {
-
+                        alert('Error');
                     });
             },
+
+            isExpanded(key) {
+                return this.users.indexOf(key) !== -1;
+            },
+
+            toggleExpansion(key) {
+                for (let index in this.users) {
+                    if (this.users[index].id === key) {
+                        this.detailPost = this.users[index].posts;
+                        break;
+                    }
+                }
+                this.code = key
+                if (this.isExpanded(key))
+                    this.users.splice(this.users.indexOf(key), 1);
+                else
+                    this.users.push(key);
+            }
         }
     }
 </script>
+<style scoped>
+    #post_table {
+        max-height: 800px;
+        overflow-y: scroll;
+    }
+</style>

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Post;
+use App\Models\User;
+use App\Models\Post;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +14,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', Auth::id())
+        $users = User::with('posts')
+            ->where('id', '!=', Auth::id())
             ->get();
 
         return response()->json([

@@ -136,9 +136,9 @@
     	    user: {
     	        type: Object,
                 defaul: () => ({}),
-            }
+            },
         },
-        data: function () {
+        data() {
     	    return {
                 userDetail: [],
                 newUser: {
@@ -170,51 +170,54 @@
             deleteUser(id) {
                 let index = this.users.findIndex(item => {
                     return (id === item.id);
-                })
-                axios.delete(`/users/${id}`)
+                });
+
+                axios.delete(laroute.route('users.destroy', {user: id}))
                     .then(({data}) => {
                         this.users.splice(index, 1);
                     }).catch(({error}) => {
-                        console.log(error);
+                        alert('Error');
                     });
             },
             createUser() {
-                axios.post('/users', this.newUser)
+                axios.post(laroute.route('users.store'), this.newUser)
                     .then(({data}) => {
                         this.users.push(data.newUser);
                     }).catch(({error}) => {
-                        alert('error');
+                        alert('Error');
                     });
 
                 this.hideModal('create');
             },
             getUsers() {
-                axios.get('/users')
+                axios.get(laroute.route('users.index'))
                     .then(response => {
                         this.users= response.data.users;
                     }).catch(error => {
-                    console.log(error);
-                });
+                        alert('Error');
+                    });
             },
             getUser(id) {
-                axios.get(`/users/${id}`)
+                axios.get(laroute.route('users.show', {user: id}))
                     .then(({data}) => {
                         this.userDetail = data;
                     }).catch(({error}) => {
-                    alert('ec');
-                });
+                        alert('Error');
+                    });
             },
             editUser(id) {
                 let index = this.users.findIndex(item => {
                     return (id === item.id);
-                })
-                axios.patch(`/users/${id}`, this.userDetail)
+                });
+
+                axios.patch(laroute.route('users.update', {user: id}), this.userDetail)
                     .then(({data}) => {
                         Vue.set(this.users, index, data.user);
                     }).catch(error => function() {
-                        console.log(error);
+                        alert('Error');
                     });
-                $('#edi').modal('hide');
+
+                $('#edit').modal('hide');
             },
             hideModal() {
                 $('#create').modal('hide');
